@@ -1,0 +1,161 @@
+@font-face {
+    font-family: Text;
+    src: url('../Font/Hattori.eot');
+    src: url('../Font/Hattori.etc?#iefix')  format('embedded-opentype'),
+         url('../Font/Hattori.woff')        format('woff'),
+         url('../Font/Hattori.ttf')         format('truetype'),
+         url('../Font/Hattori.svg#Hattori') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Title;
+    src: url('../Font/Matchbook.eot');
+    src: url('../Font/Matchbook.etc?#iefix')    format('embedded-opentype'),
+         url('../Font/Matchbook.woff')          format('woff'),
+         url('../Font/Matchbook.ttf')           format('truetype'),
+         url('../Font/Matchbook.svg#Matchbook') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    color: #3e0808;
+    font: 1.3em/1.4em Text;
+    margin: 0;
+    text-shadow: #fff -1px 1px;
+    background: #f2ede3;
+}
+
+#body {
+    position: relative;
+    min-height: 100%;
+}
+
+header {
+    margin: 0 0 5em 0;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 70%;
+}
+
+#editor {
+    width: 50%;
+    float: left;
+}
+
+    footer > p {
+        text-align: center;
+    }
+
+#result {
+    width: 50%;
+    float: right;
+}
+
+#error {
+    visibility: hidden;
+    position: absolute;
+    top: 9em;
+    bottom: 2em;
+    left: 50%;
+    right: 0;
+    text-align: center;
+    background: rgba(200, 200, 200, .6);
+}
+
+#error > div {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 140px;
+    margin: -70px 0 0 0;
+}
+
+#error > div >strong {
+    font-weight: normal;
+    font-size: 800%;
+    display: block;
+    margin: 60px 0 25px 0;
+    pointer-events: none;
+}
+
+p {
+    text-align: justify;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font: 400%/.2em Title;
+    color: #da392e;
+    text-align: center;
+    text-shadow: #bcbcb5 -2px 2px;
+    margin: 0;
+    padding: .8em 0 0 0;
+}
+
+    h1:before,
+    h1:after {
+        content: "★";
+        margin: 0 .4em;
+        font-size: 70%;
+    }
+
+a {
+    color: #a82323;
+    padding: 2px 5px;
+    text-decoration: none;
+    background: #f5e6e6;
+}
+
+    a:hover,
+    a:active {
+        color: #f5e6e6;
+        text-shadow: #611111 -1px 1px;
+        background: #a82323;
+    }
+
+.CodeMirror {
+    font-size: .9em;
+}
+
+.CodeMirror-scroll {
+    overflow-y: auto;
+    height: auto;
+    width: 100%;
+}
+
+.CodeMirror-gutter {
+    width: 3.5em;
+    border: 0;
+    background: transparent;
+}
+.CodeMirror-gutter-text  { color: #d7afaf }
+.cm-s-def                { color: #452745 }
+.cm-s-def .cm-keyword,
+.cm-s-def .cm-operator,
+.cm-s-def .cm-atom       { color: #926fa7 }
+.cm-s-def .cm-string     { color: #71986a }
+.cm-s-def .cm-comment    { color: #999 }
+.cm-s-def .cm-variable-2 { color: #b97e3d }
+.cm-s-def .cm-number,
+.cm-s-def .cm-word       { color: #3b6898 }
+
+.CodeMirror-gutter-text .error em {
+    float: left;
+    color: red;
+    font-style: normal;
+    cursor: help;
+)
