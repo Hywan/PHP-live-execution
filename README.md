@@ -12,8 +12,11 @@ production without cautions.
 
 ## Usage
 
-The code assumes you have Hoa installed in `/usr/local/lib/Hoa`.
-Then:
+First of all, install the dependencies:
+
+    $ composer install
+
+Then, start the application:
 
     $ php-cgi 127.0.0.1:9000&
     $ php Server.php

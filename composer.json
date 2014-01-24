@@ -1,0 +1,13 @@
+{
+    "require": {
+        "hoa/core"     : "dev-master",
+        "hoa/fastcgi"  : "dev-master",
+        "hoa/file"     : "dev-master",
+        "hoa/http"     : "dev-master",
+        "hoa/iterator" : "dev-master",
+        "hoa/socket"   : "dev-master",
+        "hoa/stream"   : "dev-master",
+        "hoa/websocket": "dev-master"
+    },
+    "minimum-stability": "dev"
+}

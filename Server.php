@@ -1,14 +1,6 @@
 <?php
 
-require_once '/usr/local/lib/Hoa/Core/Core.php';
-
-from('Hoa')
--> import('Websocket.Server')
--> import('Socket.Server')
--> import('Socket.Client')
--> import('FastCgi.Responder')
--> import('File.Temporary.~')
--> import('File.ReadWrite');
+require_once 'vendor/autoload.php';
 
 /**
  * Temporary files.
@@ -25,7 +17,7 @@ $ws     = new Hoa\Websocket\Server(new Hoa\Socket\Server('tcp://127.0.0.1:8889')
 /**
  * PHP FastCGI responder.
  */
-$fcgi   = new Hoa\FastCgi\Responder(new Hoa\Socket\Client('tcp://127.0.0.1:9000'));
+$fcgi   = new Hoa\Fastcgi\Responder(new Hoa\Socket\Client('tcp://127.0.0.1:9000'));
 
 $salt   = '__hoa_' . uniqid();
 $master->writeAll(
