@@ -1,0 +1,3 @@
+[submodule "Javascript/CodeMirror"]
+	path = Javascript/CodeMirror
+	url = https://github.com/marijnh/CodeMirror.git
