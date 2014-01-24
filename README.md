@@ -14,6 +14,7 @@ production without cautions.
 
 First of all, install the dependencies:
 
+    $ git submodule update --init
     $ composer install
 
 Then, start the application:
