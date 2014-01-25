@@ -1,9 +1,11 @@
 # PHP Live Execution
 
 PHP live execution is an example of what is possible to do when combining a
-Websocket server and PHP FastCGI to execute PHP in realtime, with the help of
-Hoa. Outputs and exceptions are indicated directly on the result panel, while
-errors are indicated in the editor.
+[Websocket](https://github.com/hoaproject/Websocket) server and PHP
+[FastCGI](https://github.com/hoaproject/Fastcgi) to execute PHP in realtime,
+with the help of [Hoa](http://hoa-project.net/). Outputs and exceptions are
+indicated directly on the result panel, while errors are indicated in the
+editor.
 
 [See the video](https://vimeo.com/40688620)!
 
