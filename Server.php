@@ -92,7 +92,7 @@ $ws->on('message', function ( Hoa\Core\Event\Bucket $bucket )
     $tmp->writeAll($message);
 
     // when an error occured.
-    if($salt === $content = $fcgi->send($headers)) {
+    if($salt === $fcgi->send($headers)) {
 
         $bucket->getSource()->send($message);
         $bucket->getSource()->send(
