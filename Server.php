@@ -20,58 +20,63 @@ $ws     = new Hoa\Websocket\Server(new Hoa\Socket\Server('tcp://127.0.0.1:8889')
 $fcgi   = new Hoa\Fastcgi\Responder(new Hoa\Socket\Client('tcp://127.0.0.1:9000'));
 
 $salt   = '__hoa_' . uniqid();
-$master->writeAll(
-    '<?php' . "\n" .
-    'declare(ticks=1); '. "\n" .
-    'ob_start();' . "\n" .
-    'register_shutdown_function(function ( ) use ( &$__hoa_trace ) {' . "\n" .
-    '    $error = error_get_last();' . "\n" .
-    '    switch($error[\'type\']) {' . "\n" .
-    '        case E_ERROR:' . "\n" .
-    '        case E_PARSE:' . "\n" .
-    '        case E_CORE_ERROR:' . "\n" .
-    '        case E_COMPILE_ERROR:' . "\n" .
-    '        case E_COMPILE_WARNING:' . "\n" .
-    '        case E_USER_ERROR:' . "\n" .
-    '        case E_RECOVERABLE_ERROR:' . "\n" .
-    '            ob_end_clean();' . "\n" .
-    '            file_put_contents(' . "\n" .
-    '                \'' . $trace->getStreamName() . '\',' . "\n" .
-    '                serialize($error)' . "\n" .
-    '            );' . "\n" .
-    '            exit(\'' . $salt . '\');' . "\n" .
-    '    }' . "\n" .
-    '    ob_end_clean();' . "\n" .
-    '    file_put_contents(' . "\n" .
-    '        \'' . $trace->getStreamName() . '\',' . "\n" .
-    '        serialize($__hoa_trace)' . "\n" .
-    '    );' . "\n" .
-    '});' . "\n" .
-    'register_tick_function(function ( ) use ( &$__hoa_length, &$__hoa_trace ) {' . "\n" .
-    '    $__hoa_length = $__hoa_length ?: 0;' . "\n" .
-    '    $__hoa_trace  = $__hoa_trace  ?: array();' . "\n" .
-    '    if($__hoa_length >= ($length = ob_get_length()))' . "\n" .
-    '        return;' . "\n" .
-    '    $backtrace = debug_backtrace();' . "\n" .
-    '    $output    = $backtrace[count($backtrace) - 2];' . "\n" .
-    '    $__hoa_trace[$output[\'file\']][] = array(' . "\n" .
-    '        $output[\'line\'],' . "\n" .
-    '        trim(substr(ob_get_contents(), $__hoa_length, $length))' . "\n" .
-    '    );' . "\n" .
-    '    $__hoa_length = $length;' . "\n" .
-    '});' . "\n" .
-    'try {' . "\n" .
-    '    require \'' . $tmp->getStreamName() . '\';' . "\n" .
-    '}' . "\n" .
-    'catch ( Exception $e ) {' . "\n" .
-    '    $__backtrace = $e->getTrace();' . "\n" .
-    '    $__output    = $__backtrace[count($__backtrace) - 2];' . "\n" .
-    '    $__hoa_trace[$__output[\'file\']][] = array(' . "\n" .
-    '        $__output[\'line\'],' . "\n" .
-    '        \'caught: \' . $e->getMessage()' . "\n" .
-    '    );' . "\n" .
-    '}'
-);
+
+$content = <<<'EOL'
+<?php
+file_put_contents('/tmp/gregh', 'zob');
+declare(ticks=1);
+ob_start();
+register_shutdown_function(function ( ) use ( &$__hoa_trace ) {
+    $error = error_get_last();
+    switch($error['type']) {
+        case E_ERROR:
+        case E_PARSE:
+        case E_CORE_ERROR:
+        case E_COMPILE_ERROR:
+        case E_COMPILE_WARNING:
+        case E_USER_ERROR:
+        case E_RECOVERABLE_ERROR:
+            ob_end_clean();
+            file_put_contents('{{ traceStreamName }}', serialize($error));
+
+            exit('{{ salt }}');
+    }
+    ob_end_clean();
+    file_put_contents('{{ traceStreamName }}', serialize($__hoa_trace));
+});
+register_tick_function(function ( ) use ( &$__hoa_length, &$__hoa_trace ) {
+    $__hoa_length = $__hoa_length ?: 0;
+    $__hoa_trace  = $__hoa_trace  ?: array();
+    if($__hoa_length >= ($length = ob_get_length()))
+        return;
+    $backtrace = debug_backtrace();
+    $output    = $backtrace[count($backtrace) - 2];
+    $__hoa_trace[$output['file']][] = array(
+        $output['line'],
+        trim(substr(ob_get_contents(), $__hoa_length, $length))
+    );
+    $__hoa_length = $length;
+});
+try {
+    require '{{ tmpStreamName }}';
+} catch ( Exception $e ) {
+    $__backtrace = $e->getTrace();
+    $__output    = $__backtrace[count($__backtrace) - 2];
+    $__hoa_trace[$__output['file']][] = array(
+        $__output['line'],
+        'caught: ' . $e->getMessage()
+    );
+}
+EOL;
+
+$content = strtr($content, array(
+    '{{ traceStreamName }}' => $trace->getStreamName(),
+    '{{ salt }}' => $salt,
+    '{{ tmpStreamName }}' => $tmp->getStreamName(),
+));
+
+$master->writeAll($content);
+
 $headers = array(
     'REQUEST_METHOD'  => 'GET',
     'REQUEST_URI'     => '/',
