@@ -9,7 +9,7 @@ editor.
 
 [See the video](https://vimeo.com/40688620)!
 
-**Note**: This is purely a POC! This code is not intented to be used in
+**Note**: This is purely a POC! This code is not intended to be used in
 production without cautions.
 
 ## Usage
@@ -21,6 +21,6 @@ First of all, install the dependencies:
 
 Then, start the application:
 
-    $ php-cgi 127.0.0.1:9000&
+    $ php-cgi -b 127.0.0.1:9000&
     $ php Server.php
     $ open index.html
