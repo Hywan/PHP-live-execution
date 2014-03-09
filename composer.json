@@ -1,4 +1,7 @@
 {
+    "name": "hoa/php-live-execution",
+    "description": "Eval PHP code in real time.",
+    "license": "BSD-3-Clause",
     "require": {
         "hoa/core"     : "dev-master",
         "hoa/fastcgi"  : "dev-master",
