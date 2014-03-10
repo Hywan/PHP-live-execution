@@ -23,7 +23,6 @@ $salt   = '__hoa_' . uniqid();
 
 $content = <<<'EOL'
 <?php
-file_put_contents('/tmp/gregh', 'zob');
 declare(ticks=1);
 ob_start();
 register_shutdown_function(function ( ) use ( &$__hoa_trace ) {
