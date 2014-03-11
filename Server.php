@@ -23,11 +23,16 @@ $salt   = '__hoa_' . uniqid();
 
 $content = <<<'EOL'
 <?php
+
 declare(ticks=1);
 ob_start();
+
 register_shutdown_function(function ( ) use ( &$__hoa_trace ) {
+
     $error = error_get_last();
+
     switch($error['type']) {
+
         case E_ERROR:
         case E_PARSE:
         case E_CORE_ERROR:
@@ -40,25 +45,38 @@ register_shutdown_function(function ( ) use ( &$__hoa_trace ) {
 
             exit('{{ salt }}');
     }
+
     ob_end_clean();
     file_put_contents('{{ traceStreamName }}', serialize($__hoa_trace));
+
+    return;
 });
+
 register_tick_function(function ( ) use ( &$__hoa_length, &$__hoa_trace ) {
+
     $__hoa_length = $__hoa_length ?: 0;
     $__hoa_trace  = $__hoa_trace  ?: array();
+
     if($__hoa_length >= ($length = ob_get_length()))
         return;
-    $backtrace = debug_backtrace();
-    $output    = $backtrace[count($backtrace) - 2];
+
+    $backtrace                      = debug_backtrace();
+    $output                         = $backtrace[count($backtrace) - 2];
     $__hoa_trace[$output['file']][] = array(
         $output['line'],
         trim(substr(ob_get_contents(), $__hoa_length, $length))
     );
     $__hoa_length = $length;
+
+    return;
 });
+
 try {
+
     require '{{ tmpStreamName }}';
+
 } catch ( Exception $e ) {
+
     $__backtrace = $e->getTrace();
     $__output    = $__backtrace[count($__backtrace) - 2];
     $__hoa_trace[$__output['file']][] = array(
@@ -68,14 +86,15 @@ try {
 }
 EOL;
 
-$content = strtr($content, array(
-    '{{ traceStreamName }}' => $trace->getStreamName(),
-    '{{ salt }}' => $salt,
-    '{{ tmpStreamName }}' => $tmp->getStreamName(),
-));
-
+$content = strtr(
+    $content,
+    array(
+        '{{ traceStreamName }}' => $trace->getStreamName(),
+        '{{ salt }}'            => $salt,
+        '{{ tmpStreamName }}'   => $tmp->getStreamName()
+    )
+);
 $master->writeAll($content);
-
 $headers = array(
     'REQUEST_METHOD'  => 'GET',
     'REQUEST_URI'     => '/',
